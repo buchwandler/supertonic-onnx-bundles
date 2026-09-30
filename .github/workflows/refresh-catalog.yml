@@ -1,0 +1,50 @@
+name: refresh-catalog
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "47 4 * * *"
+permissions:
+  contents: write
+concurrency:
+  group: supertonic-bundle-catalog-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install onnxvoice
+      - run: onnxvoice catalog supertonic build --output catalog/bundles.json --source-output catalog/source.json
+      - run: python scripts/check_catalog_integrity.py
+      - run: onnxvoice catalog supertonic verify --catalog catalog/bundles.json --source catalog/source.json
+      - name: Assert deterministic rebuild
+        run: |
+          cp catalog/bundles.json /tmp/supertonic-bundles-first.json
+          cp catalog/source.json /tmp/supertonic-source-first.json
+          onnxvoice catalog supertonic build --output catalog/bundles.json --source-output catalog/source.json
+          cmp --silent /tmp/supertonic-bundles-first.json catalog/bundles.json
+          cmp --silent /tmp/supertonic-source-first.json catalog/source.json
+      - name: Commit catalog change
+        run: |
+          if [ -z "$(git status --porcelain -- catalog/bundles.json catalog/source.json)" ]; then
+            echo "Catalog unchanged"
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add catalog/bundles.json catalog/source.json
+          git commit -m "chore: refresh Supertonic bundle catalog"
+          git pull --rebase origin main
+          onnxvoice catalog supertonic build --output catalog/bundles.json --source-output catalog/source.json
+          python scripts/check_catalog_integrity.py
+          onnxvoice catalog supertonic verify --catalog catalog/bundles.json --source catalog/source.json
+          if [ -n "$(git status --porcelain -- catalog/bundles.json catalog/source.json)" ]; then
+            git add catalog/bundles.json catalog/source.json
+            git commit -m "chore: reconcile Supertonic catalog after rebase"
+          fi
+          git push origin HEAD:main

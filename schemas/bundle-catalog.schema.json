@@ -1,0 +1,265 @@
+{
+  "$defs": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "component": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "filename": {
+          "$ref": "#/$defs/safeName"
+        },
+        "format": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "role": {
+          "enum": [
+            "config",
+            "unicode_indexer",
+            "model",
+            "voice_style"
+          ]
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "url": {
+          "pattern": "^https://huggingface\\.co/[^/]+/[^/]+/resolve/[0-9a-f]{40}/.+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "role",
+        "component",
+        "format",
+        "filename",
+        "path",
+        "url",
+        "size",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "bundle": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "items": {
+            "$ref": "#/$defs/safeName"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "artifacts": {
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "minItems": 6,
+          "type": "array"
+        },
+        "default_language": {
+          "minLength": 2,
+          "type": "string"
+        },
+        "default_voice": {
+          "$ref": "#/$defs/safeName"
+        },
+        "id": {
+          "$ref": "#/$defs/safeName"
+        },
+        "languages": {
+          "items": {
+            "minLength": 2,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "metadata": {
+          "type": "object"
+        },
+        "runtime": {
+          "$ref": "#/$defs/runtime"
+        },
+        "sample_rate": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "voices": {
+          "items": {
+            "$ref": "#/$defs/voice"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "aliases",
+        "sample_rate",
+        "languages",
+        "default_language",
+        "voices",
+        "default_voice",
+        "runtime",
+        "artifacts",
+        "metadata"
+      ],
+      "type": "object"
+    },
+    "relativePath": {
+      "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)(?:\\.|\\.\\.)(?:/|$)).+$",
+      "type": "string"
+    },
+    "runtime": {
+      "additionalProperties": true,
+      "properties": {
+        "base_chunk_size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "chunk_compress_factor": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "latent_dim": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "layout": {
+          "const": "supertonic-3-v1"
+        },
+        "sample_rate": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "layout",
+        "sample_rate",
+        "base_chunk_size",
+        "chunk_compress_factor",
+        "latent_dim"
+      ],
+      "type": "object"
+    },
+    "safeName": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]*$",
+      "type": "string"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "bundle_count": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "license": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "provider": {
+          "const": "huggingface"
+        },
+        "repository": {
+          "pattern": "^[^/\\\\\\s]+/[^/\\\\\\s]+$",
+          "type": "string"
+        },
+        "requested_revision": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "revision": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "snapshot_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "provider",
+        "repository",
+        "requested_revision",
+        "revision",
+        "bundle_count",
+        "license",
+        "snapshot_note"
+      ],
+      "type": "object"
+    },
+    "voice": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_component": {
+          "$ref": "#/$defs/safeName"
+        },
+        "gender": {
+          "enum": [
+            "female",
+            "male",
+            "neutral",
+            "unknown"
+          ]
+        },
+        "name": {
+          "$ref": "#/$defs/safeName"
+        }
+      },
+      "required": [
+        "name",
+        "gender",
+        "artifact_component"
+      ],
+      "type": "object"
+    }
+  },
+  "$id": "https://github.com/buchwandler/supertonic-onnx-bundles/schema/v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bundles": {
+      "additionalProperties": {
+        "$ref": "#/$defs/bundle"
+      },
+      "minProperties": 1,
+      "propertyNames": {
+        "$ref": "#/$defs/safeName"
+      },
+      "type": "object"
+    },
+    "kind": {
+      "const": "supertonic-onnx-bundle-catalog"
+    },
+    "schema": {
+      "const": 1
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    }
+  },
+  "required": [
+    "schema",
+    "kind",
+    "source",
+    "bundles"
+  ],
+  "title": "Supertonic ONNX bundle catalog",
+  "type": "object"
+}
