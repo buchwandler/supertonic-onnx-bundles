@@ -1,10 +1,7 @@
 {
   "bundles": {
     "supertonic-3": {
-      "aliases": [
-        "supertonic3",
-        "st3"
-      ],
+      "aliases": [],
       "artifacts": [
         {
           "component": null,
@@ -167,9 +164,8 @@
           "url": "https://huggingface.co/supertone-oss-archive/supertonic-3/resolve/aafc6e32416a594460b32413efc49d7fe4ce6d46/voice_styles/M5.json?download=true"
         }
       ],
-      "default_language": "na",
-      "default_voice": "M1",
-      "id": "supertonic-3",
+      "default_language": "en",
+      "default_voice": "F1",
       "languages": [
         "en",
         "ko",
@@ -204,18 +200,12 @@
         "vi",
         "na"
       ],
-      "metadata": {
-        "code_license": "MIT",
-        "model_license": "OpenRAIL-M",
-        "upstream_code": "supertone-oss-archive/supertonic-py",
-        "upstream_model": "Supertonic 3"
-      },
       "runtime": {
         "base_chunk_size": 512,
         "chunk_compress_factor": 6,
-        "default_speed": 1.05,
-        "default_steps": 5,
+        "chunk_size": 3072,
         "latent_dim": 24,
+        "latent_width": 144,
         "layout": "supertonic-3-v1",
         "sample_rate": 44100
       },
@@ -223,52 +213,42 @@
       "voices": [
         {
           "artifact_component": "F1",
-          "gender": "female",
           "name": "F1"
         },
         {
           "artifact_component": "F2",
-          "gender": "female",
           "name": "F2"
         },
         {
           "artifact_component": "F3",
-          "gender": "female",
           "name": "F3"
         },
         {
           "artifact_component": "F4",
-          "gender": "female",
           "name": "F4"
         },
         {
           "artifact_component": "F5",
-          "gender": "female",
           "name": "F5"
         },
         {
           "artifact_component": "M1",
-          "gender": "male",
           "name": "M1"
         },
         {
           "artifact_component": "M2",
-          "gender": "male",
           "name": "M2"
         },
         {
           "artifact_component": "M3",
-          "gender": "male",
           "name": "M3"
         },
         {
           "artifact_component": "M4",
-          "gender": "male",
           "name": "M4"
         },
         {
           "artifact_component": "M5",
-          "gender": "male",
           "name": "M5"
         }
       ]
@@ -278,11 +258,9 @@
   "schema": 1,
   "source": {
     "bundle_count": 1,
-    "license": "openrail-m",
     "provider": "huggingface",
     "repository": "supertone-oss-archive/supertonic-3",
-    "requested_revision": "aafc6e32416a594460b32413efc49d7fe4ce6d46",
-    "revision": "aafc6e32416a594460b32413efc49d7fe4ce6d46",
-    "snapshot_note": "Pinned to the canonical archived Supertonic-3 snapshot referenced by the archived Supertonic setup documentation."
+    "requested_revision": "main",
+    "revision": "aafc6e32416a594460b32413efc49d7fe4ce6d46"
   }
 }

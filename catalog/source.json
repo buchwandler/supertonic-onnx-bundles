@@ -1,9 +1,8 @@
 {
   "bundle_count": 1,
-  "license": "openrail-m",
   "provider": "huggingface",
   "repository": "supertone-oss-archive/supertonic-3",
-  "requested_revision": "aafc6e32416a594460b32413efc49d7fe4ce6d46",
+  "requested_revision": "main",
   "revision": "aafc6e32416a594460b32413efc49d7fe4ce6d46",
-  "snapshot_note": "Pinned to the canonical archived Supertonic-3 snapshot referenced by the archived Supertonic setup documentation."
+  "schema": 1
 }
